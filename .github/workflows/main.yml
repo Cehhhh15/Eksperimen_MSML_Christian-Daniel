@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
@@ -34,6 +34,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add preprocessing/data_clean/*.csv
+          git add 01_preprocessing/data_clean/*.csv
           git commit -m "Auto-update: Processed dataset via GitHub Actions" || echo "No changes to commit"
           git push
