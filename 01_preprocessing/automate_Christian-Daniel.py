@@ -11,17 +11,28 @@ def load_data(path):
     return df
 
 def preprocessing_data(df):
-    # Handle Missing Values pada Target
-    df['Sleep Disorder'] = df['Sleep Disorder'].fillna('None')
+    # Handle Missing Values
+    if 'Sleep Disorder' in df.columns:
+        df['Sleep Disorder'] = df['Sleep Disorder'].fillna('None')
     
-    # Encoding 
+    # Feature Engineering
+    if 'Blood Pressure' in df.columns:
+        print("   [INFO] Memecah kolom Blood Pressure...")
+        df[['BP_Systolic', 'BP_Diastolic']] = df['Blood Pressure'].str.split('/', expand=True).astype(int)
+        df = df.drop('Blood Pressure', axis=1)
+
+    # Drop kolom tidak digunakan
+    if 'Person ID' in df.columns:
+        df = df.drop('Person ID', axis=1)
+
+    # Encoding
     le = LabelEncoder()
-    categorical_cols = ['Gender', 'BMI Category', 'Sleep Disorder']
+    categorical_cols = ['Gender', 'Occupation', 'BMI Category', 'Sleep Disorder']
     
     for col in categorical_cols:
         if col in df.columns:
             df[col] = le.fit_transform(df[col])
-            print(f"Kolom {col} berhasil di-encode.")
+            print(f"   [INFO] Kolom '{col}' berhasil di-encode.")
             
     return df
 
